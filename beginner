@@ -1,0 +1,378 @@
+PIECES:
+1.infile
+#infile "地理位置"  DML=",/字符串"； /*表示以",/字符串"间隔数据*/
+2.input
+# input id $ 1-18 birthday 7-10 name $ 19-29;
+# 指针@'字符串' @字符变量 @（字符表达式）
+# input 后跟<trunover ,missover , stopover, flowover>  
+    eg. input '' trunover;
+   *trunc是截断的意思，比如你输入 street $22-37, 但是你datalines的某一行最后一个字符是第36个，那么缺一个就要到下一行去读，如果加了missover，那么就不到下一行读 street变成missing， 如果truncover那么street就是读了多少就多少
+#input name $ 6. +2 userid 3. ; /*+2表示name后第第二位开始截取*/
+# http://www.ams.sunysb.edu/~xing/AMS597/Documents/handout_sas_02.pdf
+#infile fil DLM=' ' DSD  LS=2048;     /*LS(LINESIZE)  DSD=>1.Create a delimited file using options DLM= and DSD on the FILE statement2.SAS does not properly recognize empty values for delimited data unless you use the dsd option..*/
+3.SAS-regular expression  http://support.sas.com/rnd/base/datastep/perl_regexp/regexp-tip-sheet.pdf
+4.正则表达式=》正则表达式=》http://www.cnblogs.com/deerchao/archive/2006/08/24/zhengzhe30fengzhongjiaocheng.html#mission
+5.tranwrd 函数 执行和代替函数  字段1=tranwrd(字段1,"查询字段","代替字段")
+6.##dsd是忽略引号内的分隔符，即把引号内的内容当成一个整体，这个很管用
+7.PROC MEANS=====>http://www.statedu.ntu.edu.tw/lab/SAS_AE_11/01%20MEANS.pdf
+CSS 平方和 corrected sum of square
+CV 變異係數 coefficient of variation
+KURT 峰態 kurtosis
+MAX 最大值 maximum
+MEAN 平均值
+MIN 最小值 minimum
+N 樣本數
+NMISS 遺失資料數
+MEDIAN 中位數，同 P50 median
+P1 第 1 百分位數，其他可使用百分
+位數包括 P5, P10, P25, P50, P75,
+P90, P95, P99
+Q1 第 25 百分位數，同 P25
+RANGE 全距
+SKEW 徧態 skewness
+STD 標準差 standard deviation
+STDERR 標準誤差
+SUM 總合
+VAR 變方/變異數 variance
+Q3 第 75 百分位數，同 P75
+QRANGE 四份位差 interquartile range
+8.PROC FREQ==>http://www.statedu.ntu.edu.tw/lab/SAS_AE_11/07%20FREQ.pdf
+9.条件语句===》直接在input后跟条件语句或者赋值语句
+eg.
+data xsp;
+infile 'C:\Users\xsp\Desktop\customer_scoring\simple_regession\simple_regession1.txt' dsd dlm="09"x ;
+input userid1:$10. +10 shouyi:10.  userid2:$10. currentaddress:$10. hukouaddress:$10. gender:1.  creationdate:$30. BorrowerRole  MarriageStatusId  ResidenceTypeId   @'@' Email:$ 20. EducationId  alipay   tenmpay   unipay  video  certification  age  birth ;
+if shouyi ge 0 then var=1 ;
+else do var=0;
+end;
+run;
+
+10.插入新变量
+create table b as
+select userid1,gender,mean(shouyi)as mean from xsp
+group by gender;
+quit;
+11.retain ===>
+对变量进行值的初始化和保留到下一个迭代步的作用。举例：有个数据集有10条记录。retain a;a=sum(a,1);则10条记录的a变量的值是1,2,3,4,5,6,7,8,9,10.如果不retain a;则都是1.
+在你使用INPUT语句的时候结合RETIAN可以认为是对新增变量的一个值初始化，当然你要赋予一个初始值。如果没用retain，结果就是只有第一行有值。不知道这么说是否帮到你。
+12.筛选观测==》
+data xsp;
+infile 'C:\Users\xsp\Desktop\customer_scoring\simple_regession\simple_regession1.txt' dsd dlm="09"x ;
+input userid1:$10. +10 shouyi:10.  userid2:$10. currentaddress:$10. hukouaddress:$10. gender:1.  creationdate:$30. BorrowerRole  MarriageStatusId  ResidenceTypeId   @'@' Email:$ 20. EducationId  alipay   tenmpay   unipay  video  certification  age  birth ;
+if shouyi ge 0 then var=1 ;
+else do var=0;
+end;
+run;
+data xsp;
+set xsp(where=(gender in(1,2)));   /*筛选某行*/
+run;
+
+13.PROC FREQ====>
+
+14.爬虫---网络文件。。。
+15.proc print data=xxx (keep=x1,x2)
+...
+run;
+16.最后建立数据集为当前数据集
+*如果不需建立数据集， data语句中的数据集用_NULL_
+data _null_;
+a=sin(3.14/4);
+put a;
+run;
+17.input中数据缺项值用“.”
+18.增加新变量
+input x1 x2 birthyear;
+age=year(date())-birthyear;
+19.INPUT
+#格式列表
+input (x1-x5)(4.4.4.4.1);
+input(x1-x5)(4.)
+input(x1 x2-x5)($10. 5*4.)
+#格式修饰符
+":"===》前有
+"&"===》从下一个非空格列读入，直到a.连续两个空格 b.定义长度c.输入行结束
+#绝对指针控制（数值型）
+@n==>从第n列开始读
+@指针变量： A=2;INPUT @A X1$ 10.;
+@表达式====》
+data one;
+b=2;
+input @(b*2) x1 10.;
+run;
+#绝对指针控制（字符型）
+@‘字符串’
+@ 字符变量
+@ 字符表达式
+#相对指针
++n  +变量  +表达式
+#行指针
+4种形式：#n ； #指针变量 ； #表达式 ； /（将指针移到下一输入行的第一列）
+*   #后跟着的最大值表示该观测所占的行数
+若有3行只需读2行
+input #1 x2 10. #3;====>表示一共3行
+#行保持说明符
+@@===》一行多观测
+@===》多个input语句读取同一行
+#datalines4
+数据中含“；”用datalines4结束
+datalines4;
+;;;;
+#length
+data a;
+length x1 $10.;
+input x1 x2 $ 10.;
+run;
+#label
+data a;
+label x1='身高' x2='体重'；
+input x1 x2;
+run;
+#lostcard
+当一个观测占多个输入行，防止丢失输入行后引起的定位错误，同行和if...then...使用 ，if指定判断丢失输入行的条件
+data a;
+input #2 x1 #3 x2;
+if x1 ne x2 then lostcard；
+run;
+#INFORMAT/FORMAT
+INFORMAT===>给input指定格式
+FORMAT===》给print指定格式
+data a;
+informat birthday mmddyy8.;
+input birthday;
+format birthday worddate;
+run;
+#missing(用于input之前)===》遇到missing后的值不会按无效数据处理，而等级在数据集中
+# nodate 在output中不显示系统时间
+option nodate;
+#set
+data a;/*将b复制到a*/
+set b; /*现有数据集*/
+run
+#倒入excel
+proc import out=a;
+datafile="物理地址" dbms=excel replace;
+sheet="sheet1$";
+getname=yes;
+option nodate;
+proc print;
+run;
+
+
+
+
+
+
+
+*******************************************************************************************************************
+
+libname mydb 'd:\sasdb\';
+data mydb.access_log;
+infile 'd:\access_log.txt' dlm=' ' dsd ls=2048;
+input ip_address :$46. +5 access_date DATETIME20. +8  access_page :$512.  return_code :$3. content_size :$8. ref_links :$1024. _browse :$512.;  
+access_page=tranwrd(access_page,"HTTP/1.1","");
+file 'd:\out_access_log.txt'  LS=2048;  
+put ip_address access_date access_page content_size ref_link _browse;
+run;
+代码解释：
+*程序第3行：（1）dlm定义分隔符，这里采用空格分隔；（2）dsd是忽略引号内的分隔符，即把引号内的内容当成一个整体，这个很管用。（3）ls定义行的长度，题目里有的行很长，大于1024个字符，防止读取数据不全，这里定义ls=2048
+程序第4行：（1）:&46. 冒号读取变量值直到遇到以下情况：下一个分隔符列；预先定义的长度46已经读满；数据行结束。（2） +8 列指针相对位置右移8列（减号是左移）后取数据，这个很有用，去掉了ip地址后的--符号；其实列指针还有两种用法。@20表示指针移到第二十列处，@'charater'表示指针移到'charater'字符后第一个非空字符列。
+程序第5行：使用字符串函数，TRANWRD(s,s1,s2) 从字符串s中把所有字符串s1替换成字符串s2后的结果
+* &==> INPUT NAME & $12.;  ===>"&"指输入数据中可含一个或多个空格，停止条件：a.遇到两个空格;b.达到指定的读取长度；数据行结束
+说明：
+1、经过测试，实际时间在2.4秒左右，论坛上有兄弟抱怨写文件执行时间长，其实不是写文件，而是使用print命令在控制台回显时间长，要十几秒钟。
+2、实际测试，去掉access_page中的http/1.1等字符，使用函数比正则表达式效率更高，有时会相差数量级，对时间要求高的，尽量不要用正则表达式。
+3、这道题其实算比较复杂的数据导入问题，但是用列指针感觉是效率最高的，程序的可读性也很强
+*******************************************************************************************************************
+8. 文本引用 ""   物理地址引用''
+9. &===>
+& stops reading character variables until it encounters two or more spaces. So a single space to differentiate the character variable and the adjacent variable will be ignored and the two variables will be treated as one variable.
+10.
+DSD是和DLM可结合用,也可单独用的.DSD的功能是(1)如果你的数据里有变量含有引号,那么DSD告诉sas可以不用解读引号内的delimiter；（2)如果是数字变量中有delimiter的话，可以忽略，例如1，000在读入SAS后将是1000；（3）如果变量值中连续出现两个delimiter,DSD将视其为遗失数据。DSD默认的delimiter是逗号，如果delimiter不是逗号的话，就需要用DLM来定义这个delimiter了
+11.
+#DLM = ','
+表示以逗號分隔資料
+#DLM = "09"x
+表示以 Tab 鍵跳欄分隔資料
+· INFILE 敍述句必須在 INPUT敍述句前
+12.input 时间  
+
+
+
+
+
+
+
+
+
+########################################################################################################################################################
+一、人大培训
+1.data数据步，proc过程步
+2.排序：
+proc sort data=xxx;
+by descending x1;/*降序descending*/
+run;
+3.打印显示
+ proc print data=xxx;
+var _numeric_;/*只输出数值型变量，字符型 _character_*/
+4.
+ SAS数据集文件（后缀为sas7bdat)
+ SAS程序文件(后缀为sas)
+ SAS日志文件(后缀为log)
+ SAS输出文件(后缀为list)
+5.ctrl+E 清空编辑器
+6.libname 库名 '物理地址'
+  创建逻辑库后，若需调用库中数据集每次都要用libname调用一次
+7. delimiter file =>导入分隔符文件
+8.建立数据集
+a.data步输入
+b.data步set
+data abc;/*将EFG放入ABC*/
+set  efg;
+run;
+proc print;/*默认打印ABC*/
+run
+
+c.infile
+d."导入数据"功能：
+   导入xls注意"column name in first row"
+e.利用EFI功能："导入数据"=》“user_define”(column自定义列导入，list自定义时记得在选择逗号分隔符时将BLAND去掉)
+#分析家
+9.数据模式（浏览、编辑）
+ #数据=》过滤 [抽样]
+#作图
+#可以查看code 【分析家=》菜单操作=》获取code=>编辑栏微调】
+10.ctrl+o  打开一个程序
+11.input (a b c )($)
+12.
+第一级：**  
+（＋　－）前缀，即表示正负
+　＾　><   < >
+第二级：*  /
+第三级：＋　－
+第四级：||
+第五级：其余比较算符
+第六级：＆
+第七级：｜
+
+13.
+index(s,s1)=>在s中寻找s1
+substr(s,p,n)
+scan(s2,n)
+14.
+probnorm (x)  正太分布概率值
+n (of X1-Xn)、
+nmiss ()、缺失书
+var (of x1-xn)、 方差
+std (of x1-xn) 标准差
+15.output中可调节字体
+16.
+?DATA语句的选项
+DROP选项(不列出某些变量)
+KEEP选项(列出某些变量)
+LABEL选项(给数据集加标签)
+RENAME选项(重命名变量)
+17.INPUT语句中
+:  读值时第一次遇到分隔符、或是数据行末尾、或是读满列数而结束
+＆ 字符型输入值可以嵌有一个或几个空格
+~  字符型输入值保留引号（与infile 语句中选项dsd一起使用才有效）
+18.
+数据语句中已包含； 用cards/datelines4
+19.
+Put语句负责在log窗口输出一些结果，file print选项可把输出转移到output窗口
+?Put _infile_  (输出最新的数据行到SAS log 窗口）
+?Put _all_  (输出所有变量的值）
+?Put _page_ （输出新页）
+20.
+在DATA步中，SAS系统对每个BY组创建两个临时变量：
+First .variable
+Last .variable
+　它们用来区别每个BY组的第一个和最后一个观测
+21.
+infile cards delimiter='ab'  =>原数据用AB做间隔
+22.
+▲Infile语句
+?当行末尾数据宽度少于规定宽度时
+Flowover: 默认选项，将下一条记录读入
+Missover：将变量置为缺失
+Truncover:将数据直接读入，不管宽度是否少于规定宽度
+Stopover:系统终止数据步执行，报告出错
+23.
+Put _infile_  (输出最新的数据行到SAS log 窗口）
+?Put _all_  (输出所有变量的值）
+?Put _page_ （输出新页
+24.by
+25.set 语句复制数据集
+  Point选项指明要读入的记录序号
+  set 数据集 point=指针变量
+26.
+?Set语句可以串接多个数据集，形式如下
+?Data 数据集;
+    set 数据集A    数据集B   ……;
+    <by  变量;>
+Run;
+?Rename选项负责改名；in选项产生变量负责记录观测来自该数据集；
+27.
+?使用Merge语句并接多个数据集，形式如下
+?Data 数据集；
+merge 数据集1  数据集2   ……;
+by 变量;
+run;
+28.INFILE
+Delimiter (DLM)选项：规定一个字符替代空格作为分隔符。
+?Firstobs选项 ：不是从文件的第一个记录开始，而是从指定行开始读取记录
+?Obs选项：规定用户想从输入文件中连续读取的最后一个记录号
+#
+DSD选项：
+1、使最外层引号括起的内容当成整个字符串输入，并去除最外层引号
+2、默认分隔符为逗号
+3、两个相邻的分隔符意味着前一个分隔符后的字段为缺失值
+#
+?当行末尾数据宽度少于规定宽度时(缺失)
+Flowover: 默认选项，将下一条记录读入
+Missover：将变量置为缺失
+Truncover:将数据直接读入，不管宽度是否少于规定宽度
+Stopover:系统终止数据步执行，报告出错
+
+?Lrecl=n选项：设定源数据文件行的物理长度，缺省为256，最大可设为32767
+?Pad | Nopad选项：pad选项指当宽度少于规定宽度时，在后面填充空格至Lrecl=n规定的行长度，缺省为nopad
+29.delete
+if a>3 then delete;
+30.
+?用stop语句来停止处理data步，正被处理的那个观测没有添加到SAS数据集中，stop语句不影响后面的任意data步或proc步的执行
+?用abort语句来中止SAS系统执行当前DATA步，return选项关闭SAS并返回操作系统。
+?Stop与abort的区别在于abort语句置_error_变量为1
+31.WHERE
+ *where employs>50;
+  *where industry='Food';
+  *where employs between 50 and 70;
+  *where employs in (61,62);
+  *where employs is missing;
+  *where industry ? 'Ele';   /* ? means "contains"*/
+  where industry like '%i%'; /* % can substitute many char*/ 
+  *where industry like 'O_l';  /* _ can substitute one char*/====>抽选含该字段的数据集
+32.output
+
+
+
+
+
+续3 20:36
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
