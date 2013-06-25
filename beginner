@@ -360,6 +360,17 @@ if a>3 then delete;
 
 
 
+##########################################################
+1.
+/*import data 乱码*/
+data stock;
+infile 'C:\Users\xsp\Desktop\stock_symbol.txt' dsd dlm="09"x  encoding="utf-8";
+input x1 $ x2 $;
+run;
+
+2.
+
+
 
 
 
