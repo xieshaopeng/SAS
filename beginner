@@ -369,8 +369,17 @@ input x1 $ x2 $;
 run;
 
 2.
+/*proc cluster & tree*/
 
 
+data cluster_data;
+infile 'C:\Users\luke\Desktop\cluster_data.txt' dsd dlm='09'x ;
+input borrowerid x1  x2 x3 x4 x5 x6 x7 x8 x9 x10 x11;
+run;
+proc cluster METHOD=AVERAGE data=cluster_data pseudo;
+id borrowerid;
+proc tree;
+run;
 
 
 
