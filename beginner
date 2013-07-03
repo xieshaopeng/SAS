@@ -382,6 +382,20 @@ proc tree;
 run;
 
 
+3.
+/*connect DOBC & sql server*/
+
+libname sql odbc dsn='CUBE' user=ppdai pw=Password;
+data new;
+set sql.ppdai.listing;
+run;
+proc sql;
+create table new2 as
+select sum(amount) from sql.listing;
+quit
+
+
+
 
 
 
