@@ -405,6 +405,18 @@ proc univariate data=rfm_data plot;
 var  borrower_id diff_month succount poundage;
 run;
 
+5.
+/*3D plot*/
+
+
+data rfm_data;
+infile 'C:\Users\luke\Desktop\rfm_data.txt' dsd dlm='09'x;
+input num recency frequency  monetary ;
+run;
+
+proc g3d data=rfm_data;
+plot recency*frequency=monetary;
+run;
 
 
 
