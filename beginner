@@ -394,7 +394,16 @@ create table new2 as
 select sum(amount) from sql.listing;
 quit
 
+4.
+/*quantiles & plot*/
 
+data rfm_data;
+infile 'C:\Users\luke\Desktop\rfm_data.txt' dsd dlm='09'x;
+input borrower_id diff_month succount poundage;
+run;
+proc univariate data=rfm_data plot;
+var  borrower_id diff_month succount poundage;
+run;
 
 
 
