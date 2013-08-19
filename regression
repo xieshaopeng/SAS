@@ -1,1 +1,9 @@
-1.dfdfd
+1.
+data reg;
+infile 'C:\Users\luke\Dropbox\data_mining\return_ratio_reg\data.txt' dsd dlm='09'x;
+input return_ratio	Age	diff_creationdate	BorrowerRole	inpour_count	inpout_amount	avg_inpour_amount	offline_count	offline_amount	avg_offline_amount	lent_count	lent_amount	avg_lent_amount	avg_months	to_receive_ratio	diff_first_bid	autobid_count	autobid_amount	avg_autobid_amount	is_ID5	is_phone	is_certification	is_vedio	is_NCIIC	RegsourceId	Gender	avg_login_hour	login_count	withdraw_amount	withdraw_count	avg_withdraw_amount	EducationId;
+proc gplot;
+plot  return_ratio*age;
+proc reg graphics;
+model return_ratio=age;
+run;
