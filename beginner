@@ -419,6 +419,20 @@ plot recency*frequency=monetary;
 run;
 
 
+6.
+//read excel
+
+proc import out=work.aa
+      datafile="C:\Users\luke\Dropbox\data_mining\return_ratio_reg\data.xls"
+	  dbms=excel replace;
+	  sheet="0701";
+	  getnames=yes;
+	  mixd=yes;
+	  usedate=yes;
+	  scantime=yes;
+run;
+proc print data=aa;
+run;
 
 
 
