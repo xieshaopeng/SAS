@@ -18,3 +18,57 @@ where b.amount<=100;
 quit;
 proc print data=work.aa;
 run;
+
+
+#######################################20130823###############################################
+
+
+1.
+//sas sql function
+
+avg,mean=>mean or average of values
+count,freq,n=>number of nonmissing values
+css=>corrected sum of squares
+cv=>coefﬁcient of variation (percent)
+max=>largest value
+min=>smallest value
+nmiss=>number of missing values
+prt=>probability of a greater absolute value of Student’s t
+range=>range of values
+std=>standard deviation
+stderr=>standard error of the mean
+sum=>sum of values
+sumwgt=>sum of the WEIGHT variable values1
+t=>Student’s t value for testing the hypothesis that the population mean is zero
+uss=>uncorrected sum of squares
+var=>variance
+
+
+2.
+
+libname sql odbc dsn='aa' user=ppdai pw=Password;
+proc sql;
+create table aa as
+select 	case when avgbidrate<5 then '<5%'
+             when  avgbidrate>=5 and avgbidrate<10 then '5-10%'
+              when  avgbidrate>=10 and avgbidrate<15 then '10-15%'
+			   when  avgbidrate>=15 and avgbidrate<20 then '15-20%' else '>=20%' end as return_range ,
+        case when b.age<20 then '<20'
+               when b.age>=20 and b.age<25 then '20-25'
+			   when b.age>=25 and b.age<30 then '25-30'
+			   when b.age>=30 and b.age<35 then '30-35'
+			   when b.age>=35 and b.age<40 then '35-40'
+			   when b.age>=40 and b.age<45 then '40-45'
+			   when b.age>=45 and b.age<50 then '45-50'
+			   when b.age>=50 and b.age<55 then '50-55'
+			   when b.age>=55 and b.age<60 then '55-60' else '>0' end as age_range
+
+from sql.lenderstat a 
+inner join sql.user_detail b on a.lenderid=b.userid and b.age is not null and b.age NE 0
+;
+quit;
+proc freq data=aa;
+table  age_range * return_range ;
+run;
+
+
