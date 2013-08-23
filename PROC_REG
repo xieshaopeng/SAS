@@ -7,3 +7,94 @@ plot  return_ratio*age;
 proc reg graphics;
 model return_ratio=age;
 run;
+
+
+####################################20130823###############################################
+
+1.
+//r-square
+The only thing that would make one reject a certain R2 is another approach getting a much bigger R2 from the same dataset, using a pre-specified or overfitting-corrected model.
+// in society n sociology an R Square of 0.05 is acceptable
+=SSR/SST=1-SSR/SSE
+
+2.
+analysis of variance  方差分析
+
+3.
+//output structure
+
+#anova Table
+
+                                    Sum of         Mean
+Sourcea                  DFb       Squaresc       Squared    F Valuee   Pr > Ff
+Model                     4     9543.72074     2385.93019      46.69    <.0001
+Error                   195     9963.77926       51.09630
+Corrected Total         199          19507
+
+a. SOURCE
+c. Sum of Squares - These are the Sum of Squares associated with the three sources of variance, Total, Model and Error.
+d. Mean Square - These are the Mean Squares, the Sum of Squares divided by their respective DF. 
+e. F Value - This is the F-statistic is the Mean Square Model (2385.93019) divided by the Mean Square Error (51.09630), yielding F=46.69. 
+f. Pr > F - This is the p-value associated with the above F-statistic.  It is used in testing the null hypothesis that all of the model coefficients are 0.
+
+
+#overall model fit
+
+Root MSEg              7.14817    R-Squarej     0.4892
+Dependent Meanh       51.85000    Adj R-Sqk     0.4788
+Coeff Vari            13.78624
+
+g.  Root MSE - Root MSE is the standard deviation of the error term, and is the square root of the Mean Square Error.
+h.  Dependent Mean - This is the mean of the dependent variable.
+i.  Coeff Var - This is the coefficient of variation, which is a unit-less measure of variation in the data.  It is the root MSE divided by the mean of the dependent variable, multiplied by 100: (100*(7.15/51.85) = 13.79).
+j. R-Square - R-Squared is the proportion of variance in the dependent variable (science) which can be explained by the independent variables (math, female, socst and read).  This is an overall measure of the strength of association and does not reflect the extent to which any particular independent variable is associated with the dependent variable.
+k. Adj R-Sq - This is an adjustment of the R-squared that penalizes the addition of extraneous predictors to the model.  Adjusted R-squared is computed using the formula 1 - ((1 - Rsq)(N - 1) /( N - k - 1)) where k is the number of predictors. 
+
+
+#parameter estimates
+
+                                  Parameter Estimates
+                                             Parameter       Standard
+Variablel    Labelm                  DFn     Estimateo         Errorp    t Valueq    Pr > |t|r
+Intercept    Intercept                1       12.32529        3.19356       3.86      0.0002
+math         math score               1        0.38931        0.07412       5.25      <.0001
+female                                1       -2.00976        1.02272      -1.97      0.0508
+socst        social studies score     1        0.04984        0.06223       0.80      0.4241
+read         reading score            1        0.33530        0.07278       4.61      <.0001
+                         Parameter Estimates
+Variablel     Labelm                   DFn       95% Confidence Limitss
+Intercept    Intercept                1        6.02694       18.62364
+math         math score               1        0.24312        0.53550
+female                                1       -4.02677        0.00724
+socst        social studies score     1       -0.07289        0.17258
+read         reading score            1        0.19177        0.47883
+l. Variable - This column shows the predictor variables (constant, math, female, socst, read).  The first refers the model intercept, the height of the regression line when it crosses the Y axis.  In other words, this is the predicted value of science when all other variables are 0.
+
+m.  Label - This column gives the label for the variable.  Usually, variable labels are added when the data set is created so that it is clear what the variable is (as the name of the variable can sometimes be ambiguous).  SAS has labeled the variable Intercept for us by default.  Note that this variable is not added to the data set.
+
+n.  DF - This column give the degrees of freedom associated with each independent variable.  All continuous variables have one degree of freedom, as do binary variables (such as female).
+
+o. Parameter Estimates - These are the values for the regression equation for predicting the dependent variable from the independent variable. The regression equation is presented in many different ways, for example:
+
+Ypredicted = b0 + b1*x1 + b2*x2 + b3*x3 + b4*x4
+
+The column of estimates provides the values for b0, b1, b2, b3 and b4 for this equation. 
+
+    math - The coefficient is .3893102.  So for every unit increase in math, a 0.38931 unit increase in science is predicted, holding all other variables constant. 
+   female - For every unit increase in female, we expect a -2.00976 unit decrease in the science score, holding all other variables constant.  Since female is coded 0/1 (0=male, 1=female) the interpretation is more simply: for females, the predicted science score would be 2 points lower than for males.  
+   socst - The coefficient for socst is .0498443.  So for every unit increase in socst, we expect an approximately .05 point increase in the science score, holding all other variables constant.
+   read - The coefficient for read is .3352998.  So for every unit increase in read, we expect a .34 point increase in the science score. 
+
+p. Standard Error - These are the standard errors associated with the coefficients. 
+
+q. t Value - These are the t-statistics used in testing whether a given coefficient is significantly different from zero.
+
+r. Pr > |t|- This column shows the 2-tailed p-values used in testing the null hypothesis that the coefficient (parameter) is 0.   Using an alpha of 0.05:
+   The coefficient for math is significantly different from 0 because its p-value is 0.000, which is smaller than 0.05. 
+   The coefficient for socst (.0498443) is not statistically significantly different from 0 because its p-value is definitely larger than 0.05. 
+   The coefficient for read (.3352998) is statistically significant because its p-value of 0.000 is less than .05.
+   The intercept is significantly different from 0 at the 0.05 alpha level.
+
+s. 95% Confidence Limits - These are the 95% confidence intervals for the coefficients.  The confidence intervals are related to the p-values such that the coefficient will not be statistically significant if the confidence interval includes 0.  These confidence intervals can help you to put the estimate from the coefficient into perspective by seeing how much the value could vary.
+
+
