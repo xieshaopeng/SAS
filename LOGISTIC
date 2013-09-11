@@ -91,3 +91,79 @@ COV(X，Y)=E[(X-E(X))(Y-E(Y))]
 3.模型回测？
 4.共线性问题？
 
+
+#######################0912###############################
+
+#########################binary_logistic_regression###################################
+
+
+example=>
+http://wenku.baidu.com/view/049b711514791711cc791789.html
+
+#PROC LOGISTIC OUTPUT
+
+1. Model fit statistics
+AIC(Akaike information criterion | 赤池信息量准则)
+http://zh.wikipedia.org/zh-cn/%E8%B5%A4%E6%B1%A0%E4%BF%A1%E6%81%AF%E9%87%8F%E5%87%86%E5%88%99
+
+
+
+
+
+
+
+
+
+？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？
+回归系数显著性检验 
+
+
+共线性问题
+
+
+
+################
+Three Classical Tests; Wald, LM(Score), and LR tests
+https://instruct1.cit.cornell.edu/courses/econ620/reviewm7.pdf
+http://wenku.baidu.com/view/b73d4a2f453610661ed9f424.html
+
+
+
+
+* ？？？？？？【F-test】【T-test】小于=》接受原假设 Ho   大于=》拒绝原假设
+*卡方检验(Chi-Sqr Test):适用于分类变量，它能推断两个及多个总体率或总体构成比之间的有无差异，两个属性或变量之间有无关联性，以及频数分布的拟合优度检验等。
+
+
+
+#######################
+1、SSR指回归平方和；SSE指残差平方和
+2、 tr(A)=the trace of the matrix A 矩阵A的迹。矩阵理论中是这样定义矩阵A的迹，设A=(aij)是一个n阶方阵，A的对角线元素之和称为A的迹，记为trA,即trA=a11+a22+...+ann它有两个重要的性质：
+性质1：b1+b2+...+bn=trA；性质2：b1*b2*...*bn=detA其中b1,b2,...,bn为矩阵A的特征值，detA表示A的行列式。
+
+
+
+##################basic###############
+1.logistic regression reference
+http://hi.baidu.com/hehehehello/item/40025c33d7d9b7b9633aff87
+2. wald检验统计量
+
+
+3.maximum likelihood 最大似然值
+
+
+4.最小二乘法
+
+
+
+5.
+
+
+
+？？？？、3. sig. 为概率P值，若显著性水平位0.05，若p<0.05,则拒绝零假设  ===》看总体的时候是这样
+
+
+#
+
+
+
+
