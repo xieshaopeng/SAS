@@ -437,6 +437,37 @@ run;
 
 
 
+#############################PROC TRANSPOSE##################################################
+1.
+data aa;
+infile 'C:\Users\luke\Desktop\weibo_credit\social_graph\test.txt' dsd dlm='09'x;
+input x1 x2 value;
+run;
+proc transpose  out=bb;
+by x1;
+var VALUE;
+ID X2; 
+run;
+
+2.
+//排序，转置并导出为csv
+data aa;
+infile 'C:\Users\xsp\Desktop\social_graph\top1000_borrower.txt' dsd dlm='09'x;
+input x1 x2 value;  
+run;
+proc sort data=aa out=bb;
+by x1 x2;
+run;
+proc transpose data=bb out=cc;
+by x1;
+id x2;
+var value;
+run;
+ods csv file='C:\Users\xsp\Desktop\social_graph\myfile.csv';
+proc print data=cc;
+run;
+ods csv close;
+
 
 
 
