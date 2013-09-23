@@ -6,15 +6,32 @@ PIECES:
 # 指针@'字符串' @字符变量 @（字符表达式）
 # input 后跟<trunover ,missover , stopover, flowover>  
     eg. input '' trunover;
-   *trunc是截断的意思，比如你输入 street $22-37, 但是你datalines的某一行最后一个字符是第36个，那么缺一个就要到下一行去读，如果加了missover，那么就不到下一行读 street变成missing， 如果truncover那么street就是读了多少就多少
+   *trunc是截断的意思，比如你输入 street $22-37, 但是你datalines的某一行最后一个字符是第36个，
+   那么缺一个就要到下一行去读，如果加了missover，那么就不到下一行读 street变成missing，
+   如果truncover那么street就是读了多少就多少
 #input name $ 6. +2 userid 3. ; /*+2表示name后第第二位开始截取*/
 # http://www.ams.sunysb.edu/~xing/AMS597/Documents/handout_sas_02.pdf
-#infile fil DLM=' ' DSD  LS=2048;     /*LS(LINESIZE)  DSD=>1.Create a delimited file using options DLM= and DSD on the FILE statement2.SAS does not properly recognize empty values for delimited data unless you use the dsd option..*/
+#infile fil DLM=' ' DSD  LS=2048C:\Users\luke\Desktop\rfm_data.txt' dsd dlm='09'x;
+input borrower_id diff_month succount poundage;
+run;
+proc univariate data=rfm_data plot;
+var  borrower_id diff_month succount poundage;
+run;input (x1-x5)(4.4.4.4.1);
+input(x1-x5)(4.)
+input(x1 x2-x5)($10. 5*4.)
+#格式修饰符
+":"===》前有
+"&"===》从下一个非空格列读入，;    
+/*LS(LINESIZE)  DSD=>1.Create a delimited file using options DLM= and
+DSD on the FILE statement2.SAS does not properly recognize empty values for delimited data
+unless you use the dsd option..*/
 3.SAS-regular expression  http://support.sas.com/rnd/base/datastep/perl_regexp/regexp-tip-sheet.pdf
-4.正则表达式=》正则表达式=》http://www.cnblogs.com/deerchao/archive/2006/08/24/zhengzhe30fengzhongjiaocheng.html#mission
+4.正则表达式=》正则表达式=》
+http://www.cnblogs.com/deerchao/archive/2006/08/24/zhengzhe30fengzhongjiaocheng.html#mission
 5.tranwrd 函数 执行和代替函数  字段1=tranwrd(字段1,"查询字段","代替字段")
 6.##dsd是忽略引号内的分隔符，即把引号内的内容当成一个整体，这个很管用
-7.PROC MEANS=====>http://www.statedu.ntu.edu.tw/lab/SAS_AE_11/01%20MEANS.pdf
+7.PROC MEANS
+=====>http://www.statedu.ntu.edu.tw/lab/SAS_AE_11/01%20MEANS.pdf
 CSS 平方和 corrected sum of square
 CV 變異係數 coefficient of variation
 KURT 峰態 kurtosis
@@ -36,12 +53,14 @@ SUM 總合
 VAR 變方/變異數 variance
 Q3 第 75 百分位數，同 P75
 QRANGE 四份位差 interquartile range
-8.PROC FREQ==>http://www.statedu.ntu.edu.tw/lab/SAS_AE_11/07%20FREQ.pdf
+8.PROC FREQ
+==>http://www.statedu.ntu.edu.tw/lab/SAS_AE_11/07%20FREQ.pdf
 9.条件语句===》直接在input后跟条件语句或者赋值语句
 eg.
 data xsp;
 infile 'C:\Users\xsp\Desktop\customer_scoring\simple_regession\simple_regession1.txt' dsd dlm="09"x ;
-input userid1:$10. +10 shouyi:10.  userid2:$10. currentaddress:$10. hukouaddress:$10. gender:1.  creationdate:$30. BorrowerRole  MarriageStatusId  ResidenceTypeId   @'@' Email:$ 20. EducationId  alipay   tenmpay   unipay  video  certification  age  birth ;
+input userid1:$10. +10 shouyi:10.  userid2:$10. currentaddress:$10. hukouaddress:$10. gender:1. 
+creationdate:$30. BorrowerRole  MarriageStatusId  ResidenceTypeId   @'@' Email:$ 20. EducationId  alipay   tenmpay   unipay  video  certification  age  birth ;
 if shouyi ge 0 then var=1 ;
 else do var=0;
 end;
@@ -52,9 +71,14 @@ create table b as
 select userid1,gender,mean(shouyi)as mean from xsp
 group by gender;
 quit;
+
 11.retain ===>
-对变量进行值的初始化和保留到下一个迭代步的作用。举例：有个数据集有10条记录。retain a;a=sum(a,1);则10条记录的a变量的值是1,2,3,4,5,6,7,8,9,10.如果不retain a;则都是1.
-在你使用INPUT语句的时候结合RETIAN可以认为是对新增变量的一个值初始化，当然你要赋予一个初始值。如果没用retain，结果就是只有第一行有值。不知道这么说是否帮到你。
+对变量进行值的初始化和保留到下一个迭代步的作用。
+举例：有个数据集有10条记录。retain a;a=sum(a,1);则10条记录的a变量的值是1,2,3,4,5,6,7,8,9,10.
+如果不retain a;则都是1.
+在你使用INPUT语句的时候结合RETIAN可以认为是对新增变量的一个值初始化，当然你要赋予一个初始值。
+如果没用retain，结果就是只有第一行有值。不知道这么说是否帮到你。
+
 12.筛选观测==》
 data xsp;
 infile 'C:\Users\xsp\Desktop\customer_scoring\simple_regession\simple_regession1.txt' dsd dlm="09"x ;
@@ -85,12 +109,7 @@ input x1 x2 birthyear;
 age=year(date())-birthyear;
 19.INPUT
 #格式列表
-input (x1-x5)(4.4.4.4.1);
-input(x1-x5)(4.)
-input(x1 x2-x5)($10. 5*4.)
-#格式修饰符
-":"===》前有
-"&"===》从下一个非空格列读入，直到a.连续两个空格 b.定义长度c.输入行结束
+直到a.连续两个空格 b.定义长度c.输入行结束
 #绝对指针控制（数值型）
 @n==>从第n列开始读
 @指针变量： A=2;INPUT @A X1$ 10.;
@@ -398,12 +417,7 @@ quit
 /*quantiles & plot*/
 
 data rfm_data;
-infile 'C:\Users\luke\Desktop\rfm_data.txt' dsd dlm='09'x;
-input borrower_id diff_month succount poundage;
-run;
-proc univariate data=rfm_data plot;
-var  borrower_id diff_month succount poundage;
-run;
+infile '
 
 5.
 /*3D plot*/
