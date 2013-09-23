@@ -1,0 +1,128 @@
+1. 
+Q型 == 样品
+R型 == 变量
+2.
+R^2=1-(P/T)
+P=>组内平方和
+T=>所有变量总离差平方和
+R^2越大说明聚类效果越好
+3.
+半偏相关性
+R^2=Bkl/T
+Bkl=>类K 、类L合并后所引起的类内离均差平方和的增加，（Bkl/T）越小说明合并效果越好
+4.
+伪F统计量PSF 
+F=((T-Pg)/(G-1))/(Pg/(n-G))  自由度分别为V(G-1) 及 V(n-G)
+ ==  评价分为G类的效果
+=>若分为G类合理，则类内离差平方和(分母)应该较小，类间平方和(分子)较大，所以应取伪F统计量较大而类数较小的聚类水平。
+=>相对大值表示停止点。
+
+5.
+伪t^2统计量 PFT2
+伪t^2=Bkl/((Wk+Wl)/(Nk+Nl-2))  自由度 V 和 V(Nk+Nl-2)
+=>评价上一次聚类的效果，该值大说明不应该合并这两类，应取合并前的水平
+
+6.
+三次聚类准则 CCC
+=>显示统一的原假设下的三次聚类准则和近似期望R^2。
+=>当聚类数大于观测数1/5时，CCC及R^2的期望值是缺项值。
+=>大的CCC值表示好的聚类的，大的负数值表示离群值。
+
+7.
+METHOD：
+a.
+AVERAGE=> 平均连接法，如果不指定NOSQUARE，距离数据被平方.
+
+b.
+CENTROID =>重心法，如果不指定NOSQUARE，距离数据被平方.
+
+c.
+COMPLETE =>完全连接法，（直径法，秩次典型分析）
+
+
+d.
+DENSITY =>密度连接法，使用非参数概率密度估计的聚类方法
+
+
+e.
+EML =>最大似然法，对球形多远正态分布混合进行最大似然估计
+
+
+f.
+FLEXIBLE =>可变贝塔法，lance-Williams 可变贝塔法
+
+
+g.
+MCQUITITY =>加权平均连接法，McQuitty相似分析
+
+h.
+MEDIAN =>中位数法，Gower中间距离法，如果不指定NOSQUARE，距离数据被平方.
+
+i.
+SINGLE =>单连接法 ，为减少连接，应指定 TRIM =选择
+
+j.
+TWOSTAGE => 2级密度连接法，必须指定K=,R=或HYBRID选择项
+
+k.
+WARD  =>最小方差法，如果不指定NOSQUARE，距离数据被平方.
+
+
+######################PROC FASTCLUS################################
+1.快速聚类，观测超过100，output少，需要配合其他语句。
+2.最近质心分类（nearest centroid sorting）
+3.
+
+
+
+
+
+################################K-MEANS#####################################
+//example
+1.
+http://tw.myblog.yahoo.com/da_sanlin/article?mid=2406
+
+2.
+//分为20类
+data aa;
+infile 'C:\Users\luke\Desktop\RFM\no1\test0912.txt' dsd dlm='09'x;
+input id rfm;
+run;
+proc fastclus data=aa out=km cluster=clus
+list distance
+maxclusters=20
+radius=0
+replace=full
+maxiter=20;
+var rfm;
+run;
+
+3.
+//iteration historty
+各项均小于0.02时达到收敛
+
+4.
+//cluster listing
+各观测所属的集群，以及距离集群中心点的距离
+
+5.
+
+
+
+
+
+############################变量标准化##################################
+1.
+PROC STANDARD  子集
+PROC STDIZE  推荐
+
+2.
+standardize process ==>http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000146749.htm
+标准化 Zi=（Xi-均值）/方差
+
+3.
+
+#########################PROC VARCLUS###############################################
+
+?????????
+对变量进行分类
