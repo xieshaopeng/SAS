@@ -168,7 +168,7 @@ data a;/*将b复制到a*/
 set b; /*现有数据集*/
 run
 #倒入excel
-proc import out=a;
+proc import out=a
 datafile="物理地址" dbms=excel replace;
 sheet="sheet1$";
 getname=yes;
