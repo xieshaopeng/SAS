@@ -134,3 +134,35 @@ standardize process ==>http://support.sas.com/documentation/cdl/en/proc/61895/HT
 //聚类例子
 http://jimmymall.blog.163.com/blog/static/212320043201302244927168
 
+
+
+//WARD聚类的例子
+
+
+proc import out=clus_data
+datafile=""C:\Users\luke\Desktop\operation\consolidate_operating\2013\aug\borrower_cluster\borrower_clus_0923.xls""
+dbms=excel replace;
+sheet=""data"";
+getname=yes;
+proc cluster method=ward std rsquare pseudo outtree=clus_tree;
+var avg_amount avg_count avg_poundage amount count poundage borrowers baidu_reg_ratio;
+id prov;
+proc tree data=clus_tree out=result NCL=9 horizontal;
+id prov;
+copy  avg_amount avg_count avg_poundage amount count poundage borrowers baidu_reg_ratio;  //将变量的值也加进去
+run;
+proc sort data=result;
+by cluster;
+run;
+proc means data=result   ;
+var avg_amount avg_count avg_poundage amount count poundage borrowers baidu_reg_ratio;
+by cluster;
+output out=clus_mean mean= avg_amount avg_count avg_poundage amount count poundage borrowers baidu_reg_ratio;
+data clus_mean;
+set clus_mean;
+sum=sum(avg_amount avg_count avg_poundage amount count poundage borrowers baidu_reg_ratio);
+format avg_amount avg_count avg_poundage amount count poundage borrowers baidu_reg_ratio sum 8.2;
+run;
+
+
+
